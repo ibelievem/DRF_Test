@@ -24,4 +24,24 @@ urlpatterns = [
     url(r'^students/', views.StudentsView.as_view()),
 
 
+    # 非 restful 规范
+    # url(r'^get_order/',views.get_order),
+    # url(r'^add_order/',views.add_order),
+    # url(r'^del_order/',views.del_order),
+    # url(r'^update_order/',views.update_order),
+
+
+    # restful 规范
+    # FBV
+    # url(r'^order/',views.order),
+
+    # CBV
+    url(r'^order/',views.OrderView.as_view()),
+
+
+    url(r'^dog/',views.DogView.as_view()),
+
+
+
+
 ]
