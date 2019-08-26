@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -119,3 +120,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# 全局认证配置：做如下配置，所有的视图都需要认证
+REST_FRAMEWORK={
+    # 全局使用的认证类,写的是路径
+    "DEFAULT_AUTHENTICATION_CLASSES":["api.utils.auth.FirstAuthtication",
+                                      "api.utils.auth.Authtication",
+                                      ],
+    # "UNAUTHENTICATED_USER":lambda :"匿名用户",
+    "UNAUTHENTICATED_USER":None,    # 匿名  request.user=None
+    "UNAUTHENTICATED_TOKEN":None,   # 匿名  request.auth=None
+}
