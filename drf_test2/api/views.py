@@ -9,6 +9,8 @@ from api import models
 import hashlib
 import time
 
+from api.utils.permission import SVIPPermission,MyPermission1
+from api.utils.throttle import VisitThrottle
 
 ORDER_DICT={
     1:{
@@ -25,6 +27,7 @@ ORDER_DICT={
     },
 }
 
+
 # MD5加密
 def md5(user):
 
@@ -34,13 +37,6 @@ def md5(user):
     return m.hexdigest()
 
 
-# 权限
-class MyPermission(object):
-
-    def has_permission(self,request):
-        pass
-
-
 class AuthView(APIView):
     '''
     用于用户登录认证
@@ -48,7 +44,14 @@ class AuthView(APIView):
 
     # 在settings中配置全部视图都需认证，但是当authentication_classes = []时，可免除认证，即使用匿名用户
     # 此时 requset.user=None , requset.auth=None
+    # 局部认证，匿名用户
     authentication_classes = []
+
+    # 局部权限，匿名用户
+    permission_classes = []
+
+    # 局部访问频率限制,匿名用户使用ip限制
+    throttle_classes = [VisitThrottle,]
 
     def post(self,requset,*args,**kwargs):
 
@@ -83,13 +86,16 @@ class OrderView(APIView):
     """
     订单相关业务(只有 SVIP 用户有权限)
     """
+    # 局部认证
+    # authentication_classes = [FirstAuthtication,Authtication]
+
+    # 局部权限
+    # permission_classes = [SVIPPermission,]
+
     def get(self,request,*args,**kwargs):
 
         # request.user 为 token_obj.user
         # request.auth 为 token_obj
-
-        if request.user.user_type != 3:
-            return HttpResponse("无权访问！")
 
         ret={"code":1000,"msg":None}
         try:
@@ -105,13 +111,12 @@ class UserInfoView(APIView):
     """
     用户中心（普通用户、VIP）
     """
+    # 局部权限
+    permission_classes = [MyPermission1,]
 
     def get(self,request,*args,**kwargs):
         print(request.user)
         print(request.auth)
-
-        if request.user.user_type==3:
-            return HttpResponse("无权访问")
 
         return HttpResponse("用户信息")
 
