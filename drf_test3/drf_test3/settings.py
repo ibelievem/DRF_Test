@@ -122,7 +122,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-# 版本配置
 REST_FRAMEWORK={
 
     # 全局配置版本
@@ -139,4 +138,11 @@ REST_FRAMEWORK={
 
     # 分页配置
     "PAGE_SIZE":2,
+
+    # 渲染器配置
+    "DEFAULT_RENDERER_CLASSES":[
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ],
+
 }

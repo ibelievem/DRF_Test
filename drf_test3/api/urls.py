@@ -1,5 +1,11 @@
-from django.conf.urls import url
+from django.conf.urls import url,include
 from api import views
+
+# 自动生成路由
+from rest_framework import routers
+router = routers.DefaultRouter()
+router.register(r'xxx', views.View1View)
+router.register(r'rt', views.View1View)
 
 urlpatterns = [
 
@@ -26,4 +32,11 @@ urlpatterns = [
                                                                               "patch":"partial_update"
                                                                               })),
 
+
+
+
+    url(r'^(?P<version>[v1|v2]+)/test/$', views.TestView.as_view()),
+
+
+    url(r'^(?P<version>[v1|v2]+)/', include(router.urls)),
 ]

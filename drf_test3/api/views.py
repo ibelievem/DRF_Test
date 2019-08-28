@@ -470,6 +470,36 @@ class View1View(ModelViewSet):
     pagination_class = MyPageNumberPagination
 
 
+# ---------------------------------------------------------  渲染器  -----------------------------------------------------
+
+from rest_framework.response import Response
+
+from rest_framework.renderers import JSONRenderer
+from rest_framework.renderers import BrowsableAPIRenderer
+
+
+class TestView(APIView):
+
+    # 渲染器局部配置
+    # renderer_classes = [JSONRenderer,BrowsableAPIRenderer]
+
+    def get(self,request,*args,**kwargs):
+
+        # 获取所有数据
+        roles = models.Role.objects.all()
+
+        # 创建分页对象，根据自己写的类可以定制通过参数修改每页的数据量
+        pg = MyPageNumberPagination()
+        # 创建分页对象，按部就班的显示每页的数据量
+        # pg=CursorPagination()
+
+        # 在数据库中获取分页的数据
+        pager_roles = pg.paginate_queryset(queryset=roles, request=request, view=self)
+
+        ser = PagerSerializer(instance=pager_roles, many=True)
+
+        return Response(ser.data)
+
 
 
 
