@@ -124,8 +124,19 @@ STATIC_URL = '/static/'
 
 # 版本配置
 REST_FRAMEWORK={
+
+    # 全局配置版本
     "DEFAULT_VERSIONING_CLASS":"rest_framework.versioning.URLPathVersioning",
     "DEFAULT_VERSION":"v1",
     "ALLOWED_VERSIONS":["v1","v2"],
     'VERSION_PARAM': 'version',
+
+    # 全局配置解析器
+    "DEFAULT_PARSER_CLASSES":[
+        "rest_framework.parsers.JSONParser",
+        "rest_framework.parsers.FormParser",
+    ],
+
+    # 分页配置
+    "PAGE_SIZE":2,
 }
